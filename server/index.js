@@ -1,6 +1,7 @@
 //! imports from packages
 const express = require('express')
 const mongoose = require('mongoose')
+const adminRouter = require('./routes/admin')
 
 //! imports from other files
 const authRouter = require('./routes/auth')
@@ -13,6 +14,7 @@ const DB = 'mongodb+srv://kiishidavid:kiishi100@cluster0.xr3np.mongodb.net/?retr
 //! middlewares
 app.use(express.json())
 app.use(authRouter)
+app.use(adminRouter)
 
 //! connections
 mongoose

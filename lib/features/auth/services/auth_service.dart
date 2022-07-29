@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -7,7 +9,6 @@ import 'package:project_news_restart/constants/error_handling.dart';
 import 'package:project_news_restart/constants/global_variables.dart';
 import 'package:project_news_restart/constants/utils.dart';
 import 'package:project_news_restart/features/auth/screens/login_screen.dart';
-import 'package:project_news_restart/features/home/screens/home_screen.dart';
 import 'package:project_news_restart/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:project_news_restart/providers/user_provider.dart';
@@ -34,11 +35,13 @@ class AuthService {
         token: '',
       );
 
-      http.Response res = await http.post(Uri.parse('$uri/api/signup'),
-          body: user.toJson(),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          });
+      http.Response res = await http.post(
+        Uri.parse('$uri/api/signup'),
+        body: user.toJson(),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
 
       httpErrorHandle(
         response: res,
@@ -86,11 +89,14 @@ class AuthService {
       httpErrorHandle(
         response: res,
         context: context,
+        // ignore: duplicate_ignore
         onSuccess: () async {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           // if (!mounted) return;
+          // ignore: use_build_context_synchronously
           Provider.of<UserProvider>(context, listen: false).setUser(res.body);
           await prefs.setString('x-auth-token', jsonDecode(res.body)['token']);
+          // ignore: use_build_context_synchronously
           Navigator.pushNamedAndRemoveUntil(
             context,
             BottomNavBar.routeName,

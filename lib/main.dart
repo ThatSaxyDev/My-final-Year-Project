@@ -1,13 +1,35 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:project_news_restart/common/bottom_nav_bar.dart';
+import 'package:project_news_restart/features/admin/screens/admin_screen.dart';
 import 'package:project_news_restart/features/auth/services/auth_service.dart';
-import 'package:project_news_restart/features/home/screens/home_screen.dart';
 import 'package:project_news_restart/features/onboarding/screens/onboarding_screen.dart';
 import 'package:project_news_restart/providers/user_provider.dart';
 import 'package:project_news_restart/router.dart';
 import 'package:provider/provider.dart';
+import 'package:window_manager/window_manager.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  if (Platform.isWindows) {
+    await windowManager.ensureInitialized();
+
+    WindowOptions windowOptions = const WindowOptions(
+      size: Size(1500, 1000),
+      minimumSize: Size(1500, 1000),
+      center: true,
+      backgroundColor: Colors.transparent,
+      // skipTaskbar: false,
+      // titleBarStyle: TitleBarStyle.hidden,
+    );
+    windowManager.waitUntilReadyToShow(windowOptions, () async {
+      await windowManager.show();
+      await windowManager.focus();
+    });
+  }
+
   runApp(
     MultiProvider(
       providers: [
@@ -46,7 +68,9 @@ class _MyAppState extends State<MyApp> {
       ),
       onGenerateRoute: (settings) => generateRoute(settings),
       home: Provider.of<UserProvider>(context).user.token.isNotEmpty
-          ? const BottomNavBar()
+          ? Provider.of<UserProvider>(context).user.type == 'student'
+              ? const BottomNavBar()
+              : const AdminScreen()
           : const OnboardingScreen(),
     );
   }
