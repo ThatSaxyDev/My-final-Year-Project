@@ -1,10 +1,12 @@
 //! imports from packages
 const express = require('express')
 const mongoose = require('mongoose')
-const adminRouter = require('./routes/admin')
 
 //! imports from other files
 const authRouter = require('./routes/auth')
+const adminRouter = require('./routes/admin')
+const imageRouter = require('./routes/image')
+const newsletterRouter = require('./routes/newsletter')
 
 //! initializations
 const PORT = 3000
@@ -15,6 +17,8 @@ const DB = 'mongodb+srv://kiishidavid:kiishi100@cluster0.xr3np.mongodb.net/?retr
 app.use(express.json())
 app.use(authRouter)
 app.use(adminRouter)
+app.use(imageRouter)
+app.use(newsletterRouter)
 
 //! connections
 mongoose

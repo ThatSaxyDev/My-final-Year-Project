@@ -16,7 +16,7 @@ class ImagePosterCard extends StatelessWidget {
     return SizedBox(
       height: height,
       child: PhysicalModel(
-        color: Colors.grey,
+        color: Colors.white,
         elevation: 15,
         borderRadius: BorderRadius.circular(Dimensions.radius15),
         child: ClipRRect(

@@ -2,6 +2,7 @@ const express = require('express')
 const { model } = require('mongoose')
 const admin = require('../middlewares/admin')
 const Image = require('../models/image_upload')
+const Newsletter = require('../models/newsletter')
 const adminRouter = express.Router()
 
 //! upload image
@@ -35,6 +36,39 @@ adminRouter.post('/admin/delete-image', admin, async (req, res) => {
     let image = await Image.findByIdAndDelete(id)
 
     res.json(image)
+  } catch (e) {
+    res.status(500).json({ error: e.message })
+  }
+})
+
+//! upload newsletters
+adminRouter.post('/admin/add-newsletter', admin, async (req, res) => {
+  try {
+    const { newsletter } = req.body
+    let newsletterUp = new Newsletter({ newsletter })
+    newsletterUp = await newsletterUp.save()
+    res.json(newsletterUp)
+  } catch (e) {
+    res.status(500).json({ error: e.message })
+  }
+})
+
+//! get all newsletters
+adminRouter.get('/admin/get-newsletter', admin, async (req, res) => {
+  try {
+    const newsletters = await Newsletter.find({})
+    res.json(newsletters)
+  } catch (e) {
+    res.status(500).json({ error: e.message })
+  }
+})
+
+//! delete newsletter
+adminRouter.post('/admin/delete-newsletter', admin, async (req, res) => {
+  try {
+    const { id } = req.body
+    let newsletter = await Newsletter.findByIdAndDelete(id)
+    res.json(newsletter)
   } catch (e) {
     res.status(500).json({ error: e.message })
   }

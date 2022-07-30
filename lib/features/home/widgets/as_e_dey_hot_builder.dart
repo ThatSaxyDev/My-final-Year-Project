@@ -1,41 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:project_news_restart/constants/dimensions.dart';
-import 'package:project_news_restart/features/home/services/dummy_models.dart';
-import 'package:project_news_restart/features/home/widgets/article_card.dart';
+import 'package:project_news_restart/features/home/services/home_services.dart';
 import 'package:project_news_restart/features/home/widgets/image_poster.dart';
+import 'package:project_news_restart/models/newsletter.dart';
+import '../../../common/loader.dart';
 
-class AsEDeyHotBuilder extends StatelessWidget {
+class AsEDeyHotBuilder extends StatefulWidget {
   const AsEDeyHotBuilder({Key? key}) : super(key: key);
 
   @override
+  State<AsEDeyHotBuilder> createState() => _AsEDeyHotBuilderState();
+}
+
+class _AsEDeyHotBuilderState extends State<AsEDeyHotBuilder> {
+  List<NewsletterUpload>? newsletters;
+  final HomeServices homeServices = HomeServices();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchAllNewsletters();
+  }
+
+  fetchAllNewsletters() async {
+    newsletters = await homeServices.fetchAllNewsletters(context);
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      scrollDirection: Axis.vertical,
-      shrinkWrap: true,
-      itemCount: asEDeyHot.length,
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: Dimensions.width20,
-            vertical: Dimensions.height20,
-          ),
-          child: 
-          // asEDeyHot[index]['isArticle'] == true
-          //     ? ArticleCard(
-          //         image:
-          //             asEDeyHot[index]['image'].toString(),
-          //         text:
-          //             asEDeyHot[index]['text'].toString(),
-          //       )
-          //     : 
-              ImagePosterCard(
-                height: Dimensions.height10 * 40,
-                  image:
-                      'https://images.unsplash.com/photo-1653149030110-bec7c89bcd93?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80',
+    return newsletters == null
+        ? const Loader()
+        : ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: newsletters!.length,
+            itemBuilder: (context, index) {
+              final newsletterData = newsletters![index];
+              return Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: Dimensions.width20,
+                  vertical: Dimensions.height20,
                 ),
-        );
-      },
-    );
+                child: ImagePosterCard(
+                  height: Dimensions.height10 * 40,
+                  image: newsletterData.newsletter[0],
+                ),
+              );
+            },
+          );
   }
 }

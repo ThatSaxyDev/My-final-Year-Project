@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:project_news_restart/common/loader.dart';
 import 'package:project_news_restart/features/admin/services/admin_services.dart';
-import 'package:project_news_restart/features/home/widgets/image_poster.dart';
+import 'package:project_news_restart/features/admin/widgets/newsletter_gallery.dart';
+import 'package:project_news_restart/features/admin/widgets/poster_gallery.dart';
 import 'package:project_news_restart/models/upload.dart';
 
 import '../../../common/ttinterfaces_text.dart';
@@ -15,6 +15,17 @@ class GalleryScreen extends StatefulWidget {
 }
 
 class _GalleryScreenState extends State<GalleryScreen> {
+  int _galleryType = 0;
+
+  List<Widget> galleryTypes = [
+    const PosterGallery(),
+    const NewsletterGallery(),
+  ];
+
+  void setGalleryType(int galleryType) {
+    _galleryType = galleryType;
+  }
+
   List<ImageUpload>? images;
   final AdminServices adminServices = AdminServices();
 
@@ -76,72 +87,58 @@ class _GalleryScreenState extends State<GalleryScreen> {
                     ),
                   ],
                 ),
+
+                //! buttons for switching type of gallery
+                //! poster gallery
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      _galleryType == 0;
+                    });
+                    setGalleryType(0);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    elevation: 10,
+                    shadowColor: Colors.grey.withOpacity(0.5),
+                    primary: Colors.black,
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(Dimensions.height10),
+                    child: const TTinterfacesText(
+                      text: 'Poster Gallery',
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+
+                //! newsletter gallery
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      _galleryType == 1;
+                    });
+                    setGalleryType(1);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    elevation: 10,
+                    shadowColor: Colors.grey.withOpacity(0.5),
+                    primary: Colors.black,
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(Dimensions.height10),
+                    child: const TTinterfacesText(
+                      text: 'Newsletter Gallery',
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
 
           //! display images
           SingleChildScrollView(
-            child: Container(
-              height: MediaQuery.of(context).size.height / 1.26,
-              // color: Colors.red,
-              padding: EdgeInsets.all(Dimensions.height10),
-              child: images == null
-                  ? const Loader()
-                  : GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 4,
-                        mainAxisSpacing: DimensionsDesk.length10 * 0.1,
-                        crossAxisSpacing: DimensionsDesk.length10 * 0.1,
-                        childAspectRatio: 10 / 13,
-                      ),
-                      scrollDirection: Axis.vertical,
-                      itemCount: images!.length,
-                      itemBuilder: (context, index) {
-                        final imageData = images![index];
-                        return Container(
-                          // color: Colors.red,
-                          margin: EdgeInsets.only(
-                            top: DimensionsDesk.length10 * 2,
-                            left: DimensionsDesk.length10 * 2,
-                            right: DimensionsDesk.length10 * 2,
-                            bottom: DimensionsDesk.length10 * 4,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  // height: DimensionsDesk.length10 * 23,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.withOpacity(0.5),
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(
-                                        DimensionsDesk.length10 * 2,
-                                      ),
-                                    ),
-                                    image: DecorationImage(
-                                        image: NetworkImage(
-                                          imageData.image[0],
-                                        ),
-                                        fit: BoxFit.fill),
-                                  ),
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () => deleteImage(imageData, index),
-                                icon: Icon(
-                                  Icons.delete_forever,
-                                  size: Dimensions.iconSize10 * 3,
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-            ),
+            child: galleryTypes[_galleryType],
           ),
         ],
       ),

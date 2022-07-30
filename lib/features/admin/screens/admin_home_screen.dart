@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project_news_restart/common/ttinterfaces_text.dart';
 import 'package:project_news_restart/constants/dimensions.dart';
+import 'package:project_news_restart/features/admin/widgets/upload_newsletters.dart';
 import 'package:project_news_restart/features/admin/widgets/upload_posters.dart';
 
 class AdminHomeScreen extends StatefulWidget {
@@ -15,12 +16,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
 
   List<Widget> uploadTypes = [
     const UploadPosters(),
-    Center(
-      child: TTinterfacesText(
-        text: 'Upload Newsletters',
-        size: Dimensions.font10 * 8,
-      ),
-    ),
+    const UploadNewsletters(),
   ];
 
   void setUploadType(int uploadType) {

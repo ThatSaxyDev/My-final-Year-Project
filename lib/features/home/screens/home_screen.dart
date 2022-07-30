@@ -4,10 +4,7 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:project_news_restart/common/ttinterfaces_text.dart';
 import 'package:project_news_restart/constants/dimensions.dart';
-import 'package:project_news_restart/features/home/widgets/article_card.dart';
 import 'package:project_news_restart/features/home/widgets/as_e_dey_hot_builder.dart';
-import 'package:project_news_restart/features/home/widgets/image_poster.dart';
-import 'package:project_news_restart/features/home/widgets/news_card.dart';
 import 'package:project_news_restart/features/home/widgets/news_of_the_day.dart';
 import 'package:project_news_restart/features/home/widgets/stay_updated_news_builder.dart';
 import 'package:project_news_restart/providers/user_provider.dart';
@@ -72,13 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
 
-                //!!!
-                //! TODO: Create a listview builder that can "randomize" content based on a few logic...
-                //! if content has an image or video URL, give this, if it is just text, give that.
-
-                //? test widgets
-                //! image poster test
-                AsEDeyHotBuilder(),
+                const AsEDeyHotBuilder(),
               ],
             ),
 
@@ -89,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 end: Dimensions.height10 * 2,
               ),
               elevation: 0,
-              badgeContent: TTinterfacesText(text: '2'),
+              badgeContent: const TTinterfacesText(text: '2'),
               badgeColor: Colors.white,
               child: Positioned(
                 right: Dimensions.width10 * 3,
